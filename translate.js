@@ -1,5 +1,6 @@
 var tmp = require('tmp'),
   fs = require('fs'),
+  util = require('util'),
   Promise = require('promise'),
   sox = require('sox'),
   request = require('request'),
@@ -16,10 +17,11 @@ var speech_to_text = watson.speech_to_text({
 })
 
 var Translate = function (location) {
+  this.transcript = null 
   this.location = location
 }
 
-Translate.prototype = new EventEmitter()
+util.inherits(Translate, EventEmitter);
 
 Translate.prototype.transcode_to_16k = function () {
   var that = this
