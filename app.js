@@ -1,6 +1,7 @@
 var twilio = require('twilio')
 var translate = require('./translate.js')
 var async = require('async')
+var slackbot = require('./slackbot.js')
 
 var express = require('express'),
   xmlparser = require('express-xml-bodyparser'),
@@ -11,9 +12,12 @@ var app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(xmlparser())
 
+var bot = slackbot('https://hooks.slack.com/services/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')
+
 var queue = async.queue(function (task, callback) {
   var process = function () {
     console.log(task.transcript)
+    bot.post(task.transcript)
     callback()
   }
 
@@ -39,7 +43,7 @@ app.post('/recording', function (req, res) {
   if (req.body) {
     var audio_location = req.body.RecordingUrl
     schedule_translation(audio_location)
- }
+  }
 
   res.send(twiml.toString())
   console.log('<-- RESPONSE @' + (new Date()).toISOString())

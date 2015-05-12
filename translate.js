@@ -16,12 +16,16 @@ var speech_to_text = watson.speech_to_text({
   version: 'v1'
 })
 
+var error = function (err) {
+  console.log(err)
+}
+
 var Translate = function (location) {
-  this.transcript = null 
+  this.transcript = null
   this.location = location
 }
 
-util.inherits(Translate, EventEmitter);
+util.inherits(Translate, EventEmitter)
 
 Translate.prototype.transcode_to_16k = function () {
   var that = this
@@ -36,6 +40,7 @@ Translate.prototype.transcode_to_16k = function () {
       reject(err)
     })
     job.on('end', function () {
+      console.log('Converted ' + that.source + ' to ' + that.upsample)
       resolve()
     })
     job.start()
@@ -45,6 +50,7 @@ Translate.prototype.transcode_to_16k = function () {
 }
 
 Translate.prototype.download_source = function () {
+  console.log('Downloading ' + this.source)
   var that = this
 
   var promise = new Promise(function (resolve, reject) {
@@ -58,6 +64,7 @@ Translate.prototype.download_source = function () {
 }
 
 Translate.prototype.translate_to_text = function () {
+  console.log('Translating ' + this.upsample)
   var that = this
 
   var params = {
@@ -66,6 +73,7 @@ Translate.prototype.translate_to_text = function () {
   }
 
   speech_to_text.recognize(params, function (err, res) {
+    console.log('Speech recognition returned')
     if (err) {
       console.error(err)
       return
@@ -75,6 +83,8 @@ Translate.prototype.translate_to_text = function () {
     if (result) {
       that.transcript = result.alternatives[0].transcript
       that.emit('available')
+    } else {
+      console.error('Missing speech recognition result.')
     }
   })
 }
@@ -86,14 +96,14 @@ Translate.prototype.tmp_files = function () {
   return Promise.all(temp_files).then(function (results) {
     that.source = results[0]
     that.upsample = results[1]
-  })
+  }, error)
 }
 
 Translate.prototype.start = function () {
   this.tmp_files()
-    .then(this.download_source.bind(this))
-    .then(this.transcode_to_16k.bind(this))
-    .then(this.translate_to_text.bind(this))
+    .then(this.download_source.bind(this), error)
+    .then(this.transcode_to_16k.bind(this), error)
+    .then(this.translate_to_text.bind(this), error)
 }
 
 module.exports = function (location) {
