@@ -58,6 +58,11 @@ app.post('/', function (req, res) {
   console.log('<-- RESPONSE @' + (new Date()).toISOString())
 })
 
+app.post('/slackbot', function (req, res) {
+  console.log(req.body)
+  bot.channel_message(req.body)
+})
+
 var server = app.listen(1337, function () {
   var host = server.address().address
   var port = server.address().port
