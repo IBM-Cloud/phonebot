@@ -2,6 +2,7 @@ var twilio = require('twilio')
 var translate = require('./translate.js')
 var async = require('async')
 var slackbot = require('./slackbot.js')
+var call_manager = require('./call_manager.js')
 
 var cfenv = require('cfenv')
 var service = cfenv.getAppEnv().getService('twilio')
@@ -18,6 +19,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(xmlparser())
 
 var bot = slackbot('https://hooks.slack.com/services/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')
+
+var channel_call_mgr = {}
+
+var get_call_mgr = function (channel) {
+  if (!channel_call_mgr[channel]) {
+    channel_call_mgr[channel] = call_manager(channel)
+  }
+
+  return channel_call_mgr[channel]
+}
 
 var call_replies = [],
   duration = 10,
@@ -40,9 +51,11 @@ var hangup = function (cb) {
 }
 
 // Need to handle disconnection & active calls
-bot.on('call', function (number) {
+bot.on('call', function (channel, number) {
   // TODO: Hang up active calls.
 
+  get_call_mgr(channel).call(number)
+  /*
   client.makeCall({
     to: number,
     // TODO: None of this should be hardcoded.
@@ -52,7 +65,7 @@ bot.on('call', function (number) {
     if (err) console.log(err)
     console.log(responseData)
     active_call = responseData.sid
-  })
+  }) */
 })
 
 bot.on('say', function (text) {
