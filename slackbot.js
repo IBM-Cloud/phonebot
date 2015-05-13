@@ -5,7 +5,10 @@ var request = require('request'),
 function Slackbot (outgoing) {
   this.COMMANDS = {
     'help': 'Hello! This is Phonebot. You can make telephone calls using the \'call\' command.',
-    'call': this.call
+    'call': this.call,
+    'say': this.say,
+    'duration': this.duration,
+    'hangup': this.emit.bind(this, 'hangup')
   }
 
   this.outgoing = outgoing
@@ -32,6 +35,27 @@ Slackbot.prototype.call = function (text) {
   return message
 }
 
+Slackbot.prototype.say = function (text) {
+  var message = 'Phonebot Command: say TEXT...<-- Sends text as speech to the call.'
+  if (text.length) {
+    this.emit('say', text)
+  }
+  return message
+}
+
+Slackbot.prototype.duration = function (text) {
+  var message = 'Phonebot Command: duration NUMBER<-- Modify audio recording duration' +
+    'for translation. Smaller durations mean faster translations but greater audio gaps.'
+
+  var number = text.match(/\d+/)
+  if (number) {
+    message = ''
+    this.emit('duration', number[0])
+  }
+
+  return message
+}
+
 Slackbot.prototype.channel_message = function (message) {
   var response = "What's up?"
 
@@ -44,7 +68,7 @@ Slackbot.prototype.channel_message = function (message) {
     response = command.call(this, words.slice(2).join(' '))
   }
 
-  this.post(response)
+  if (typeof response === 'string') this.post(response)
 }
 
 module.exports = function (outgoing) {
