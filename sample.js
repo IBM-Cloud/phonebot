@@ -7,7 +7,14 @@ instance.on('available', function () {
 instance.start()
 */
 
-var sb = require('./slackbot.js')
 
-bot = sb('https://hooks.slack.com/services/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')
-bot.post('Hello')
+//Place a phone call, and respond with TwiML instructions from the given URL
+client.makeCall({
+  to: '07728258842', // Any number Twilio can call
+  from: '+447728258842', // A number you bought from Twilio and can use for outbound communication
+  url: 'http://40405d27.ngrok.com'
+}, function(err, responseData) {
+  if (err) console.log(err)
+    //executed when the call has been initiated.
+    console.log(responseData); // outputs "+14506667788"
+});

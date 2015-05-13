@@ -41,7 +41,7 @@ Slackbot.prototype.channel_message = function (message) {
   if (typeof command === 'string') {
     response = command
   } else if (typeof command === 'function') {
-    response = command(words.slice(2).join(' '))
+    response = command.call(this, words.slice(2).join(' '))
   }
 
   this.post(response)

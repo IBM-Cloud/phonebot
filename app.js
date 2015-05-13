@@ -3,6 +3,12 @@ var translate = require('./translate.js')
 var async = require('async')
 var slackbot = require('./slackbot.js')
 
+var cfenv = require('cfenv')
+var service = cfenv.getAppEnv().getService('twilio')
+
+var twilio_auth_token = service.credentials.authToken
+var client = twilio(service.credentials.accountSID, service.credentials.authToken)
+
 var express = require('express'),
   xmlparser = require('express-xml-bodyparser'),
   bodyParser = require('body-parser')
@@ -13,6 +19,19 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(xmlparser())
 
 var bot = slackbot('https://hooks.slack.com/services/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')
+
+bot.on('call', function (number) {
+  client.makeCall({
+    to: number,
+    // TODO: None of this should be hardcoded.
+    from: '+447728258842',
+    url: 'http://40405d27.ngrok.com'
+  }, function(err, responseData) {
+    if (err) console.log(err)
+    //executed when the call has been initiated.
+    console.log(responseData); 
+  });
+})
 
 var queue = async.queue(function (task, callback) {
   var process = function () {
