@@ -18,79 +18,73 @@ var app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(xmlparser())
 
-var bot = slackbot('https://hooks.slack.com/services/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')
-
 var channel_call_mgr = {}
+
+var channel_bots = {
+}
+
+var create_bot = function (channel, webhook) {
+  var bot = slackbot(webhook)
+  channel_bots[channel] = bot
+
+  // Need to handle disconnection & active calls
+  bot.on('call', function (number) {
+    var call_mgr = get_call_mgr(channel)
+
+    if (call_mgr.is_active()) {
+      bot.post('The line is busy, you have to hang up first...!')
+      return
+    }
+
+    call_mgr.call(number, 'http://40405d27.ngrok.com/' + channel)
+  })
+
+  bot.on('say', function (text) {
+    get_call_mgr(channel).say(text)
+  })
+
+  bot.on('duration', function (duration) {
+    get_call_mgr(channel).options({duration: duration})
+  })
+
+  bot.on('hangup', function () {
+    var call_mgr = get_call_mgr(channel)
+
+    if (!call_mgr.is_active()) {
+      bot.post('There isn\'t a phone call to hang up...')
+      return
+    }
+
+    call_mgr.hangup()
+  })
+}
+
+// Should come from CFENV
+create_bot('slackbot-testing', 'https://hooks.slack.com/services/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')
 
 var get_call_mgr = function (channel) {
   if (!channel_call_mgr[channel]) {
-    channel_call_mgr[channel] = call_manager(channel)
+    channel_call_mgr[channel] = call_manager(client, channel)
+    listen_to_events(channel_call_mgr[channel], channel)
   }
 
   return channel_call_mgr[channel]
 }
 
-var call_replies = [],
-  duration = 10,
-  active_call = null
-
-var hangup = function (cb) {
-  if (!active_call) {
-    return
-  }
-
-  client.calls(active_call).update({
-    status: 'completed'
-  }, function (err, call) {
-    if (err) console.log(err)
-
-    console.log(call.direction)
-    active_call = null
-    cb()
+var listen_to_events = function (call_mgr, channel) {
+  call_mgr.on('recording', function (location) {
+    var req = translate(location)
+    req.channel = channel
+    req.start()
+    queue.push(req)
   })
+  // .. add event handlers to listen and post call state changes to the channel
 }
-
-// Need to handle disconnection & active calls
-bot.on('call', function (channel, number) {
-  // TODO: Hang up active calls.
-
-  get_call_mgr(channel).call(number)
-  /*
-  client.makeCall({
-    to: number,
-    // TODO: None of this should be hardcoded.
-    from: '+447728258842',
-    url: 'http://40405d27.ngrok.com'
-  }, function (err, responseData) {
-    if (err) console.log(err)
-    console.log(responseData)
-    active_call = responseData.sid
-  }) */
-})
-
-bot.on('say', function (text) {
-  call_replies.push(text)
-})
-
-bot.on('duration', function (_) {
-  duration = _
-})
-
-bot.on('hangup', function () {
-  if (!active_call) {
-    bot.post('There isn\'t a phone call to hang up...')
-    return
-  }
-
-  hangup(function () {
-    bot.post('Phone call terminated!')
-  })
-})
 
 var queue = async.queue(function (task, callback) {
   var process = function () {
     console.log(task.transcript)
-    bot.post(task.transcript)
+    channel_bots[task.channel].post(task.transcript)
     callback()
   }
 
@@ -101,46 +95,21 @@ var queue = async.queue(function (task, callback) {
   }
 }, 1)
 
-var schedule_translation = function (location) {
-  var req = translate(location)
-  req.start()
-  queue.push(req)
-}
-
-app.post('/recording', function (req, res) {
+app.post('/recording/:channel', function (req, res) {
   console.log('--> REQUEST @' + (new Date()).toISOString())
 
-  var twiml = new twilio.TwimlResponse()
+  var channel = req.params.channel
 
-  if (call_replies.length) {
-    var user_speech = call_replies.join(' ')
-    call_replies = []
-    twiml.say(user_speech)
-  }
-
-  twiml.record({playBeep: false, trim: 'do-not-trim', maxLength: duration, timeout: 60})
-
-  if (req.body) {
-    var audio_location = req.body.RecordingUrl
-    schedule_translation(audio_location)
-  }
-
+  var twiml = get_call_mgr(channel).process(req)
   res.send(twiml.toString())
-  console.log('<-- RESPONSE @' + (new Date()).toISOString())
-})
 
-app.post('/', function (req, res) {
-  console.log('--> REQUEST @' + (new Date()).toISOString())
-  var twiml = new twilio.TwimlResponse()
-  twiml.say('Hello this is Phonebot').record({action: '/recording', playBeep: false, trim: 'do-not-trim', maxLength: duration, timeout: 60})
-
-  res.send(twiml.toString())
   console.log('<-- RESPONSE @' + (new Date()).toISOString())
 })
 
 app.post('/slackbot', function (req, res) {
   console.log(req.body)
-  bot.channel_message(req.body)
+  var channel = req.body.channel_name
+  channel_bots[channel].channel_message(req.body)
 })
 
 var server = app.listen(1337, function () {

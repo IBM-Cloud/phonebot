@@ -24,13 +24,13 @@ Slackbot.prototype.post = function (text) {
   })
 }
 
-Slackbot.prototype.call = function (text, channel) {
+Slackbot.prototype.call = function (text) {
   var message = 'Phonebot Command: call PHONE_NUMBER <-- Dials the phone number.'
   var numbers = text.match(/\d+/g)
 
   if (numbers) {
     message = 'Calling... ' + numbers.join(' ') + ' *ring* *ring*'
-    this.emit('call', numbers.join(''), channel)
+    this.emit('call', numbers.join(''))
   }
   return message
 }
@@ -65,7 +65,7 @@ Slackbot.prototype.channel_message = function (message) {
   if (typeof command === 'string') {
     response = command
   } else if (typeof command === 'function') {
-    response = command.call(this, words.slice(2).join(' '), message.channel_id)
+    response = command.call(this, words.slice(2).join(' '))
   }
 
   if (typeof response === 'string') this.post(response)
