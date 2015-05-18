@@ -7,7 +7,7 @@ var PhoneBot = function (client, channels, base_url) {
   this.channels = {}
   this.base_url = base_url
 
-  for(var key in channels) {
+  for (var key in channels) {
     this.channels[key] = {
       bot: this.create_channel_bot(channels[key], key),
       phone: this.create_call_manager(client, key),
@@ -56,16 +56,18 @@ PhoneBot.prototype.create_channel_bot = function (webhook, channel) {
 }
 
 PhoneBot.prototype.create_call_manager = function (client, channel) {
-    var phone = call_manager(client, channel)
-    that = this
+  var phone = call_manager(client, channel)
+  var that = this
 
-    phone.on('recording', function (location) {
-      var req = translate(location)
-      req.start()
-      that.channels[channel].queue.push(req)
-    })
+  phone.on('recording', function (location) {
+    var req = translate(location)
+    req.start()
+    that.channels[channel].queue.push(req)
+  })
 
-    return phone
+  // TODO: Add extra hooks for phone states...
+  //
+  return phone
 }
 
 PhoneBot.prototype.create_translation_queue = function (channel) {
@@ -84,6 +86,17 @@ PhoneBot.prototype.create_translation_queue = function (channel) {
       task.on('available', process)
     }
   }, 1)
+}
+
+// Need to handle unknown channel messages.
+PhoneBot.prototype.phone_message = function (channel, message) {
+  // ...
+  return this.channels[channel].phone.process(message)
+}
+
+PhoneBot.prototype.slack_message = function (channel, message) {
+  // ...
+  this.channels[channel].bot.channel_message(message)
 }
 
 module.exports = function (client, channels, base_url) {

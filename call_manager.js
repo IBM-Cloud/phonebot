@@ -76,6 +76,7 @@ CallManager.prototype.call_active = function () {
 CallManager.prototype.stats = function () {
 }
 
+// TODO: Need to handle all call paths -> hanging up/etc...., connected
 CallManager.prototype.process = function (req) {
   var twiml = new twilio.TwimlResponse()
 
