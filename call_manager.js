@@ -1,4 +1,6 @@
-var twilio = require('twilio')
+var twilio = require('twilio'),
+  util = require('util'),
+  EventEmitter = require('events').EventEmitter
 
 function CallManager (client, channel) {
   this.client = client
@@ -6,10 +8,12 @@ function CallManager (client, channel) {
   this.active_call = null
   this.outgoing = []
 
-  this.options = {
+  this.defaults = {
     duration: 10
   }
 }
+
+util.inherits(CallManager, EventEmitter)
 
 CallManager.prototype.default_greeting = 'Hello this is Phonebot'
 
@@ -19,6 +23,7 @@ CallManager.prototype.call = function (number, route) {
 
   var that = this
   this.outgoing = [this.default_greeting]
+  this.active_call = true
 
   this.client.makeCall({
     to: number,
@@ -30,14 +35,12 @@ CallManager.prototype.call = function (number, route) {
     console.log(responseData)
     that.active_call = responseData.sid
   })
-
-  this.active_call = true
 }
 
 CallManager.prototype.hangup = function () {
   var that = this
 
-  if (!this.is_active()) return
+  if (!this.call_active()) return
 
   this.client.calls(this.active_call).update({
     status: 'completed'
@@ -53,7 +56,7 @@ CallManager.prototype.say = function (text) {
   // If we're waiting for the outgoing call to connect,
   // let user override the default greeting.
   if (this.outgoing[0] === this.default_greeting) {
-    this.outgoing = [this.default_greeting]
+    this.outgoing[0] = text
     return
   }
 
@@ -62,7 +65,7 @@ CallManager.prototype.say = function (text) {
 
 CallManager.prototype.options = function (opts) {
   if (typeof opts.duration === 'number') {
-    this.options.duration = opts.duration
+    this.defaults.duration = opts.duration
   }
 }
 
@@ -83,7 +86,7 @@ CallManager.prototype.process = function (req) {
     twiml.say(user_speech)
   }
 
-  twiml.record({playBeep: false, trim: 'do-not-trim', maxLength: this.options.duration, timeout: 60})
+  twiml.record({playBeep: false, trim: 'do-not-trim', maxLength: this.defaults.duration, timeout: 60})
 
   if (req.body) {
     this.emit('recording', req.body.RecordingUrl)
