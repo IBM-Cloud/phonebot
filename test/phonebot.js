@@ -2,13 +2,17 @@ var assert = require('assert')
 var mockery = require('mockery')
 
 var location
-var cbs = []
+var cbs = {
+  available: [],
+  failed: []
+}
+
 var ret = {
   start: function () {
   },
   transcript: 'Sample', 
   on: function (id, cb) {
-    cbs.push(cb)
+    cbs[id].push(cb)
   }
 }
 var translate = function (_) {
@@ -36,7 +40,7 @@ describe('PhoneBot', function(){
         'three': 'hook_three'
       }
 
-      var pb = PhoneBot(null, channels)
+      var pb = PhoneBot(null, null, channels)
       var keys = Object.keys(pb.channels)
       assert.deepEqual(Object.keys(channels), keys)
       keys.forEach(function (key) {
@@ -49,7 +53,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -65,7 +69,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels, 'http://sample.com'),
+      var pb = PhoneBot(null, null, channels, 'http://sample.com'),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -83,7 +87,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -100,7 +104,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -116,7 +120,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -131,7 +135,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -147,7 +151,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -163,7 +167,7 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
@@ -177,7 +181,7 @@ describe('PhoneBot', function(){
       phone.emit('recording', 'location')
       setTimeout(function () {
         ret.transcript = "Sample 1 2 3"
-        cbs[0]()
+        cbs.available[0]()
       }, 10)
     })
     it('should handle multiple translation tasks being queued', function(done){
@@ -185,12 +189,13 @@ describe('PhoneBot', function(){
         'one': 'hook_one'
       }
 
-      var pb = PhoneBot(null, channels),
+      var pb = PhoneBot(null, null, channels),
         bot = pb.channels.one.bot,
         phone = pb.channels.one.phone
 
       ret.transcript = null
-      cbs = []
+      cbs.available = []
+      cbs.failed = []
 
       var count = 0
 
@@ -205,7 +210,33 @@ describe('PhoneBot', function(){
 
       setTimeout(function () {
         ret.transcript = "transcript"
-        cbs[0]()
+        cbs.available[0]()
+      }, 50)
+    })
+    it('should handle failed translation tasks', function(done){
+      var channels = {
+        'one': 'hook_one'
+      }
+
+      var pb = PhoneBot(null, null, channels),
+        bot = pb.channels.one.bot,
+        phone = pb.channels.one.phone
+
+      ret.transcript = null
+      cbs.available = []
+      cbs.failed = []
+
+      bot.post = function (text) {
+        assert.equal(text, 'transcript')
+        done()
+      }
+      // Need to mock out translate
+      phone.emit('recording', 'location')
+      phone.emit('recording', 'location')
+
+      setTimeout(function () {
+        ret.transcript = "transcript"
+        cbs.failed[0]()
       }, 50)
     })
     describe('#phone_message', function(){
@@ -214,7 +245,7 @@ describe('PhoneBot', function(){
           'one': 'hook_one'
         }
 
-        var pb = PhoneBot(null, channels),
+        var pb = PhoneBot(null, null, channels),
           phone = pb.channels.one.phone
 
         assert.equal(null, pb.phone_message('two', null))
@@ -224,7 +255,7 @@ describe('PhoneBot', function(){
           'one': 'hook_one'
         }
 
-        var pb = PhoneBot(null, channels),
+        var pb = PhoneBot(null, null, channels),
           phone = pb.channels.one.phone
 
         phone.process = function () {
@@ -239,7 +270,7 @@ describe('PhoneBot', function(){
           'one': 'hook_one'
         }
 
-        var pb = PhoneBot(null, channels),
+        var pb = PhoneBot(null, null, channels),
           phone = pb.channels.one.phone
 
         assert.equal(null, pb.slack_message('two', null))
@@ -249,7 +280,7 @@ describe('PhoneBot', function(){
           'one': 'hook_one'
         }
 
-        var pb = PhoneBot(null, channels),
+        var pb = PhoneBot(null, null, channels),
           bot = pb.channels.one.bot
 
         var called = false
