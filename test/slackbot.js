@@ -10,8 +10,8 @@ describe('Slackbot', function(){
   before(function() {
     mockery.enable({useCleanCache: true}); // Enable mockery at the start of your test suite
     mockery.registerMock('request', request);
-    mockery.registerAllowables(['events', '../slackbot.js', 'util']);
-    slackbot = require('../slackbot.js')
+    mockery.registerAllowables(['events', '../lib/slackbot.js', 'util']);
+    slackbot = require('../lib/slackbot.js')
   })
 
   after(function() {
