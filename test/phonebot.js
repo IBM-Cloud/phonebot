@@ -208,5 +208,59 @@ describe('PhoneBot', function(){
         cbs[0]()
       }, 50)
     })
+    describe('#phone_message', function(){
+      it('should ignore messages for channels not registered', function(){
+        var channels = {
+          'one': 'hook_one'
+        }
+
+        var pb = PhoneBot(null, channels),
+          phone = pb.channels.one.phone
+
+        assert.equal(null, pb.phone_message('two', null))
+      })
+      it('should process messages for registered channels', function(){
+        var channels = {
+          'one': 'hook_one'
+        }
+
+        var pb = PhoneBot(null, channels),
+          phone = pb.channels.one.phone
+
+        phone.process = function () {
+          return "testing"
+        }
+        assert.equal('testing', pb.phone_message('one', null))
+      })
+    })
+    describe('#slack_message', function(){
+      it('should ignore messages for channels not registered', function(){
+        var channels = {
+          'one': 'hook_one'
+        }
+
+        var pb = PhoneBot(null, channels),
+          phone = pb.channels.one.phone
+
+        assert.equal(null, pb.slack_message('two', null))
+      })
+      it('should process messages for registered channels', function(){
+        var channels = {
+          'one': 'hook_one'
+        }
+
+        var pb = PhoneBot(null, channels),
+          bot = pb.channels.one.bot
+
+        var called = false
+        bot.channel_message = function () {
+          called = true
+        }
+        pb.slack_message('one', null)
+        assert.equal(true, called)
+      })
+    })
+
+
   })
 })
