@@ -71,7 +71,8 @@ describe('Slackbot', function(){
         assert.equal('111', text)
         done()
       })
-      bot.say('111')
+      var response = bot.say('111')
+      assert.equal(response, '')
     })
     it('should show help text for command without number', function(){
       var bot = slackbot()
