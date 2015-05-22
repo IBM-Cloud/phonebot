@@ -1,0 +1,40 @@
+{
+  "name": "phonebot",
+  "version": "1.0.0",
+  "description": "Slackbot to make phonecalls using Twilio and IBM Watson",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "cfenv": "^1.0.0",
+    "enum": "^2.1.0",
+    "loglevel": "^1.2.0",
+    "mocha-eslint": "^0.1.7",
+    "mockery": "^1.4.0",
+    "request": "^2.55.0",
+    "express-xml-bodyparser": "^0.0.7",
+    "promise": "^7.0.1",
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3",
+    "twilio": "^2.2.0",
+    "watson-developer-cloud": "^0.9.9",
+    "sox": "^0.1.0",
+    "tmp": "^0.0.25"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jthomas/phonebot.git"
+  },
+  "author": "James Thomas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jthomas/phonebot/issues"
+  },
+  "homepage": "https://github.com/jthomas/phonebot"
+}
