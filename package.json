@@ -9,10 +9,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "cfenv": "^1.0.0",
-    "enum": "^2.1.0",
     "loglevel": "^1.2.0",
-    "mocha-eslint": "^0.1.7",
-    "mockery": "^1.4.0",
     "request": "^2.55.0",
     "express-xml-bodyparser": "^0.0.7",
     "promise": "^7.0.1",
@@ -24,7 +21,9 @@
     "tmp": "^0.0.25"
   },
   "devDependencies": {
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "mocha-eslint": "^0.1.7",
+    "mockery": "^1.4.0"
   },
   "scripts": {
     "test": "mocha"
