@@ -1,3 +1,5 @@
+'use strict'
+
 var express = require('express'),
     cfenv = require('cfenv'),
     log = require('loglevel')

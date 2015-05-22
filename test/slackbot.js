@@ -1,6 +1,9 @@
 var assert = require('assert')
 var mockery = require('mockery')
 
+var log = require('loglevel')
+log.disableAll()
+
 var param
 var request = function (req) {
   param = req
@@ -10,7 +13,7 @@ describe('Slackbot', function(){
   before(function() {
     mockery.enable({useCleanCache: true}); // Enable mockery at the start of your test suite
     mockery.registerMock('request', request);
-    mockery.registerAllowables(['events', '../lib/slackbot.js', 'util']);
+    mockery.registerAllowables(['loglevel', 'events', '../lib/slackbot.js', 'util']);
     slackbot = require('../lib/slackbot.js')
   })
 

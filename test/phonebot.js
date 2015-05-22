@@ -1,6 +1,9 @@
 var assert = require('assert')
 var mockery = require('mockery')
 
+var log = require('loglevel')
+log.disableAll()
+
 var location
 var cbs = {
   available: [],

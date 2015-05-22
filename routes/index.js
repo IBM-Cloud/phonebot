@@ -1,3 +1,5 @@
+'use strict'
+
 var xmlparser = require('express-xml-bodyparser'),
     bodyParser = require('body-parser'),
     twilio = require('twilio'),
@@ -9,8 +11,7 @@ var xmlparser = require('express-xml-bodyparser'),
 var service_credentials = function (name) {
   var service = cfenv.getAppEnv().getService(name)
   if (!service) {
-    log.error('FATAL: Missing service credentials: ' + name)
-    process.exit(1)
+    throw new Error('FATAL: Missing service credentials: ' + name)
   }
 
   return service.credentials
@@ -39,7 +40,9 @@ module.exports = function (app) {
     res.send(bot.phone_message(req.params.channel, req))
   })
 
+  /*eslint-disable no-unused-vars*/
   app.post('/slackbot', function (req, res) {
+    /*eslint-enable no-unused-vars*/
     log.debug('HTTP POST /slackbot/ (#' + req.body.channel_name + ')' + ' @ ' + (new Date()).toISOString())
     log.trace(req.body)
 
