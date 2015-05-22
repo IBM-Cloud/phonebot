@@ -23,7 +23,9 @@
     "sox": "^0.1.0",
     "tmp": "^0.0.25"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  },
   "scripts": {
     "test": "mocha"
   },
