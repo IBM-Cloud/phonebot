@@ -1,0 +1,20 @@
+---
+applications:
+- name: phonebot 
+  memory: 256M 
+  command: node app.js
+  buildpack: https://github.com/jthomas/nodejs-buildpack.git
+  services:
+  - twilio
+  - speech_to_text
+  - slack_webhooks
+declared-services:
+  twilio:
+    label: Twilio
+    plan: 'user-provided'
+  twilio:
+    label: slack_webhooks
+    plan: 'user-provided'
+  speech_to_text:
+    label: speech_to_text
+    plan: free
