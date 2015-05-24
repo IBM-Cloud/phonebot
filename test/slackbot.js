@@ -57,7 +57,7 @@ describe('Slackbot', function(){
     it('should return channel message about new phone call', function(){
       var bot = slackbot()
       var message = bot.call('111')
-      assert.equal(message, 'Calling... 111 *ring* *ring*')
+      assert.equal(message, ':phone: Let me try to put you through...')
     })
     it('should show help text for command without number', function(){
       var bot = slackbot()
