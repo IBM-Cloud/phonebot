@@ -12,16 +12,16 @@ Add link to blog post.
 
 INCLUDE GIF OF PHONEBOT
 
-## Deployment Instructions
+### Deployment Instructions
 
-### Set up Outgoing Slack Webhooks
-### Set up Incoming Slack Webhooks
-### Deploy to IBM Bluemix
+#### Set up Outgoing Slack Webhooks
+#### Set up Incoming Slack Webhooks
+#### Deploy to IBM Bluemix
 
 Set up Twilio details, slack webhooks and Watson APIs
 $ cf push --name name
 
-## Development Mode 
+### Development Mode 
 
 Move over webhooks
 Use ngrok 
