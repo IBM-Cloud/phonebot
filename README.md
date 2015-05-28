@@ -136,7 +136,7 @@ requests at http://your_random_identifier.mybluemix.net.
 *... and you're done! Phonebot should post a message to each registered channel
 to confirm it's ready for action.*
 
-## Development Mode 
+### Development Mode 
 
 Running Phonebot on your development machine is possible provided you following
 these steps...
