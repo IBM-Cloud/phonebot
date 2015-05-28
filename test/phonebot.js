@@ -33,6 +33,8 @@ describe('PhoneBot', function(){
     mockery.enable(); // Enable mockery at the start of your test suite
     mockery.warnOnUnregistered(false);
     mockery.registerMock('./translate.js', translate);
+    mockery.registerMock('request', function () {
+    })
     PhoneBot = require('../lib/phonebot.js')
   })
 

@@ -26,6 +26,8 @@ commands are available:
 @phonebot call PHONE_NUMBER <-- Dials the phone number
 @phonebot say TEXT <-- Sends text as speech to the call 
 @phonebot hangup <-- Ends the active call
+@phonebot verbose {on|off}<-- Toggle verbose mode
+@phonebot duration NUMBER <-- Set recording duration
 @phonebot help <-- Show all commands usage information 
 ```
 
