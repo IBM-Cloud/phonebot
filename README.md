@@ -60,7 +60,7 @@ The following parameters must be configured:
 * **Trigger Words** - @phonebot
 * **URL** - http://<INSERT_APP_NAME>.mybluemix.net/slackbot
 
-ADD IMAGE
+![Outgoing Webhooks](https://dl.dropboxusercontent.com/u/10404736/Outgoing%20Webhooks.png)
 
 #### Set up Incoming Slack Webhooks
 
@@ -69,7 +69,7 @@ Phonebot to post the translated call audio as channel messages. We need an incom
 with a registered outgoing webhook. Visiting the [Service Integration](https://my.slack.com/services/new/incoming-webhook) page will allow
 you to create a new incoming webhook URL to post channel messages.
 
-ADD IMAGE
+![Incoming Webhooks](https://dl.dropboxusercontent.com/u/10404736/Incoming%20Webhooks.png)
 
 Copy the generated URL that exposes the webhook, you will need to pass this into
 the application as explained in the section below.
