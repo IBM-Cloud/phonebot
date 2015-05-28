@@ -110,6 +110,43 @@ describe('Slackbot', function(){
     })
   })
 
+  describe('#verbose', function(){
+    it('should ignore invalid settings', function(){
+      var bot = slackbot()
+
+      bot.on('verbose', function(_){
+        assert.ok(false)
+      })
+
+      bot.duration('random text')
+    })
+    it('should turn verbose on', function(done){
+      var bot = slackbot()
+
+      bot.on('verbose', function(_){
+        assert.equal(true, _)
+        done()
+      })
+
+      bot.verbose('on')
+    })
+    it('should turn verbose off', function(done){
+      var bot = slackbot()
+
+      bot.on('verbose', function(_){
+        assert.equal(false, _)
+        done()
+      })
+
+      bot.verbose('off')
+    })
+    it('should show help text for command without duration', function(){
+      var bot = slackbot()
+      var message = bot.verbose('')
+      assert.ok(message.indexOf('Phonebot Command') === 0)
+    })
+  })
+
   describe('#channel_message', function(){
     it('should ignore commands not registered', function(){
       var bot = slackbot(),

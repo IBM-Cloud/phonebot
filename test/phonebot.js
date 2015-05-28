@@ -123,6 +123,23 @@ describe('PhoneBot', function(){
 
       bot.emit('duration', 100)
     })
+    it('should sent user to enable verbose mode', function(done){
+      var channels = {
+        'one': 'hook_one'
+      }
+
+      var pb = PhoneBot(client, null, channels),
+        bot = pb.channels.one.bot,
+        phone = pb.channels.one.phone
+
+      phone.options = function (options) {
+        assert.equal(options.verbose, true)
+        done()
+      }
+
+      bot.emit('verbose', true)
+    })
+    
     it('should not attempt to hang up phone call when line is not active', function(done){
       var channels = {
         'one': 'hook_one'

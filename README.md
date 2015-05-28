@@ -15,8 +15,6 @@ NodeJS web application handles incoming messages from Slack, IBM Watson and Twil
 [![Build Status](https://api.travis-ci.org/jthomas/phonebot.svg?branch=master)](https://api.travis-ci.org/jthomas/phonebot.svg?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 
-Add link to blog post. 
-
 INCLUDE GIF OF PHONEBOT
 
 ## Usage
