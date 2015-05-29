@@ -12,7 +12,7 @@ NodeJS web application handles incoming messages from Slack, IBM Watson and Twil
 <img src="http://bluemix.net/deploy/button.png" alt="Bluemix button" />
 </a>
 
-[![Build Status](https://api.travis-ci.org/jthomas/phonebot.svg?branch=master)](https://api.travis-ci.org/jthomas/phonebot.svg?branch=master)
+[![Build Status](https://api.travis-ci.org/jthomas/phonebot.svg?branch=master)](https://api.travis-ci.org/IBM-Bluemix/phonebot.svg?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 
 ![Phonebot](https://dl.dropboxusercontent.com/u/10404736/Phonebot.png)
