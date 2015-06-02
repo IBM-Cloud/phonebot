@@ -8,11 +8,11 @@ Twilio is used to make phone calls and capture call audio.
 IBM Watson's "Speech To Text" service is used to translate the audio into text.
 NodeJS web application handles incoming messages from Slack, IBM Watson and Twilio. 
 
-<a href="https://bluemix.net/deploy?repository=https://github.com/jthomas/doctor-watson" target="_blank">
+<a href="https://bluemix.net/deploy?repository=https://github.com/IBM-Bluemix/phonebot" target="_blank">
 <img src="http://bluemix.net/deploy/button.png" alt="Bluemix button" />
 </a>
 
-[![Build Status](https://api.travis-ci.org/jthomas/phonebot.svg?branch=master)](https://api.travis-ci.org/IBM-Bluemix/phonebot.svg?branch=master)
+[![Build Status](https://api.travis-ci.org/IBM-Bluemix/phonebot.svg?branch=master)](https://api.travis-ci.org/IBM-Bluemix/phonebot.svg?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 
 ![Phonebot](https://dl.dropboxusercontent.com/u/10404736/Phonebot.png)
