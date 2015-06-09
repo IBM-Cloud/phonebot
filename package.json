@@ -18,7 +18,9 @@
     "twilio": "^2.2.0",
     "watson-developer-cloud": "^0.9.9",
     "sox": "^0.1.0",
-    "tmp": "^0.0.25"
+    "tmp": "^0.0.25",
+    "commander": "^2.6.0",
+    "http-post": "^0.1.1"
   },
   "devDependencies": {
     "mocha": "^2.2.5",
