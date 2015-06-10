@@ -24,6 +24,7 @@ var s2t = service_credentials('speech_to_text')
 var speech_to_text = watson.speech_to_text({
   username: s2t.username,
   password: s2t.password,
+  url: s2t.url,
   version: 'v1'
 })
 
