@@ -12,7 +12,7 @@ declared-services:
   twilio:
     label: Twilio
     plan: 'user-provided'
-  twilio:
+  slack_webhooks:
     label: slack_webhooks
     plan: 'user-provided'
   speech_to_text:

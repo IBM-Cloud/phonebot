@@ -1,5 +1,5 @@
 var assert = require('assert')
-var CallManager = require('../lib/call_manager.js')
+var CallManager = require('../../lib/call_manager.js')
 var twilio = require('twilio')
 var log = require('loglevel')
 log.disableAll()
