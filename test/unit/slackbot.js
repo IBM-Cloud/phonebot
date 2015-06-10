@@ -8,13 +8,16 @@ var param
 var request = function (req) {
   param = req
 }
+request.post = function (req) {
+  param = req
+}
 
 describe('Slackbot', function(){
   before(function() {
     mockery.enable({useCleanCache: true}); // Enable mockery at the start of your test suite
     mockery.registerMock('request', request);
-    mockery.registerAllowables(['loglevel', 'events', '../lib/slackbot.js', 'util']);
-    slackbot = require('../lib/slackbot.js')
+    mockery.registerAllowables(['loglevel', 'events', '../../lib/slackbot.js', 'util']);
+    slackbot = require('../../lib/slackbot.js')
   })
 
   after(function() {
