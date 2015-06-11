@@ -18,12 +18,14 @@ var service_credentials = function (name) {
 }
 
 var twilio_account = service_credentials('twilio'),
-  client = twilio(twilio_account.accountSID, twilio_account.authToken)
+  host = twilio_account.url.replace(/http(s)?:\/\//, ''),
+  client = twilio(twilio_account.accountSID, twilio_account.authToken, {host: host})
 
 var s2t = service_credentials('speech_to_text')
 var speech_to_text = watson.speech_to_text({
   username: s2t.username,
   password: s2t.password,
+  url: s2t.url,
   version: 'v1'
 })
 
@@ -47,5 +49,6 @@ module.exports = function (app) {
     log.trace(req.body)
 
     bot.slack_message(req.body.channel_name, req.body)
+    res.sendStatus(200)
   })
 }

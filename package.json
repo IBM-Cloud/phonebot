@@ -25,10 +25,12 @@
   "devDependencies": {
     "mocha": "^2.2.5",
     "mocha-eslint": "^0.1.7",
-    "mockery": "^1.4.0"
+    "mockery": "^1.4.0",
+    "requestbin": "^1.1.1"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha test/unit",
+    "integration-test": "mocha test/integration",
     "install": "node admin.js track",
     "start": "node app.js"
   },
