@@ -46,7 +46,10 @@ describe('PhoneBot', function(){
    it('should respond to channel messages', function(done){
      this.timeout(5000)
       request.post({url: test_server + '/slackbot', form: {channel_name: 'testing', text: '@phonebot hello'}}, function (err, resp, body) {
-        if (err) assert.ok(false)
+        if (err) { 
+          console.log(err)
+          assert.ok(false)
+       }
 
           setTimeout(function () {
             request.get({url: stub_server + '/requests', json: true}, function (err, resp, body) {

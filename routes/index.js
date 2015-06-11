@@ -18,7 +18,8 @@ var service_credentials = function (name) {
 }
 
 var twilio_account = service_credentials('twilio'),
-  client = twilio(twilio_account.accountSID, twilio_account.authToken, {host: twilio_account.url})
+  host = twilio_account.url.replace(/http(s)?:\/\//, ''),
+  client = twilio(twilio_account.accountSID, twilio_account.authToken, {host: host})
 
 var s2t = service_credentials('speech_to_text')
 var speech_to_text = watson.speech_to_text({
