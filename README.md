@@ -95,7 +95,7 @@ the platform. Replace the ACCOUNT_SID and TOKEN values with credentials from
 your [account settings page](https://www.twilio.com/user/account/settings).
 
 ```
-$ cf cups twilio -p '{"accountSID":"ACCOUNT_SID","authToken":"TOKEN"}'
+$ cf cups twilio -p '{"accountSID":"ACCOUNT_SID","authToken":"TOKEN", "url": "https://api.twilio.com"}'
 ```
 
 *Note: Phonebot will work with a Twilio trial account, however outgoing calls are 
