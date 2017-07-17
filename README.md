@@ -15,7 +15,7 @@ NodeJS web application handles incoming messages from Slack, IBM Watson and Twil
 [![Build Status](https://api.travis-ci.org/IBM-Bluemix/phonebot.svg?branch=master)](https://api.travis-ci.org/IBM-Bluemix/phonebot.svg?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 
-![Phonebot](https://dl.dropboxusercontent.com/u/10404736/Phonebot.png)
+![Phonebot](http://jamesthom.as/images/Phonebot.png)
 
 ## Usage
 
@@ -60,7 +60,7 @@ The following parameters must be configured:
 * **Trigger Words** - @phonebot
 * **URL** - http://<INSERT_APP_NAME>.mybluemix.net/slackbot
 
-![Outgoing Webhooks](https://dl.dropboxusercontent.com/u/10404736/Outgoing%20Webhooks.png)
+![Outgoing Webhooks](http://jamesthom.as/images/outgoing_wh.png)
 
 #### Set up Incoming Slack Webhooks
 
@@ -69,7 +69,7 @@ Phonebot to post the translated call audio as channel messages. We need an incom
 with a registered outgoing webhook. Visiting the [Service Integration](https://my.slack.com/services/new/incoming-webhook) page will allow
 you to create a new incoming webhook URL to post channel messages.
 
-![Incoming Webhooks](https://dl.dropboxusercontent.com/u/10404736/Incoming%20Webhooks.png)
+![Incoming Webhooks](http://jamesthom.as/images/incoming_wh.png)
 
 Copy the generated URL that exposes the webhook, you will need to pass this into
 the application as explained in the section below.
